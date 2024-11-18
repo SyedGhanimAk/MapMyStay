@@ -1,0 +1,155 @@
+<% layout('layouts/boilerplate') -%>
+
+    <body>
+        <div class="row d-flex justify-content-center">
+            <div class="col-10 col-lg-8 col-xl-6 ">
+                <div class="card listingDetailCard fade-in">
+                    <h3 class="card-title mb-4">
+                        <%=result.title%>
+                    </h3>
+                    <img class="card-img-top listingDetailImg" src="<%=result.image.url%>">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b>Owner: </b>
+                            <%= result.owner.username%>
+                        </p>
+                        <p class="card-text">
+                            <b>Description: </b>
+                            <%=result.description%>
+                        </p>
+                        <p class="card-text">
+                            <b>Price:</b>
+                            &#8377 <%=result.price?.toLocaleString("en-IN")%> &sol; night
+                        </p>
+                        <p class="card-text">
+                            <b>Location: </b>
+                            <%=result.location%>
+                        </p>
+                        <p class="card-text">
+                            <b>Country: </b>
+                            <%=result.country%>
+                        </p>
+
+                        <%if(UserExists && String(UserExists._id)===String(result.owner._id)) {%>
+                            <div class="listingDetailActionButtons">
+                                <form action="/listings/<%=result.id%>/edit">
+
+                                    <button class="btn me-2">Edit</button>
+                                </form>
+                                <form method="post" action="/listings/<%=result.id%>/delete">
+
+                                    <button class="btn ms-2">Delete</button>
+                                </form>
+                            </div>
+                            <%}%>
+
+
+
+                    </div>
+                </div>
+
+
+                <div class="reviewContainer">
+                    <%if(UserExists) {%>
+                        <hr>
+                        <br>
+                        <h4>Leave a review</h4>
+                        <form method="post" action="/listings/<%=result.id%>" class="needs-validation" novalidate>
+                    
+                            <label for="ratingDiv" class="form-label mt-3">Rating</label>
+                            <fieldset class="starability-checkmark" >
+            
+                                <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked aria-label="No rating." />
+                                <input type="radio" id="first-rate1" name="rating" value="1" />
+                                <label for="first-rate1" title="Terrible">1 star</label>
+                                <input type="radio" id="first-rate2" name="rating" value="2" />
+                                <label for="first-rate2" title="Not good">2 stars</label>
+                                <input type="radio" id="first-rate3" name="rating" value="3" />
+                                <label for="first-rate3" title="Average">3 stars</label>
+                                <input type="radio" id="first-rate4" name="rating" value="4" />
+                                <label for="first-rate4" title="Very good">4 stars</label>
+                                <input type="radio" id="first-rate5" name="rating" value="5" />
+                                <label for="first-rate5" title="Amazing">5 stars</label>
+                              </fieldset>
+                            <label for="comments" class="form-label">Comments</label>
+                            <textarea class="form-control" name="comments" id="comments" rows="4" required></textarea>
+                            <div class="invalid-feedback">
+                                Please give a comment
+                            </div>
+
+                            <button type="submit" class="btn mt-3">Submit</button>
+                        </form> <%}%>
+
+                            <div class="showReviews">
+                                <% if(result.reviews.length) {%>
+                                    <hr> <br>
+                                    <h4>Reviews</h4>
+                                    <%}%>
+
+                                        <div class="row">
+                                            <% for(review of result.reviews.reverse()) {%>
+
+                                                <div class="card m-2 p-2 col-12 col-md-5 ">
+                                                    <div class="card-body">
+                                                        <p class="small card-text">
+                                                            @<%=review.createdBy.username%>,
+                                                            <small class="text-muted"><%=review.createdAt.toLocaleDateString('en-US',
+                                                                {day: "numeric" , year: 'numeric' , month: 'short' })%>
+                                                                </small>
+                                                        
+                                                        </p>
+                                                    <p class="card-text starability-result" data-rating= <%=review.rating%>>
+                                                                  </p>
+                                                     
+                                                        <p class="card-text mb-3">
+                                                            <%=review.comment%>
+                                                        </p>
+                                                       
+                                                        <%if(UserExists &&
+                                                        // both are in string so that type of both will be same while comparing
+                                                            (String(UserExists._id)===String(result.owner._id)||
+                                                            String(UserExists._id)===String(review.createdBy._id))) {%>
+                                                            <form method="POST"
+                                                                action="/listings/<%=result.id%>/<%=review.id%>/delete">
+                                                                <button class="btn btn-sm">Delete</button>
+                                                            </form>
+                                                            <%}%>
+                                                    </div>
+                                                </div><%}%>
+                                        </div>
+                            </div>
+                </div>
+                <div class="MapBox">
+                <hr><br>
+                <h4 >Where you’ll be</h4>
+                <br>
+                <div class="row">
+                <div id="map"></div></div>
+                
+                </div>
+
+            </div>
+
+        </div>
+       
+    <script>
+        // map
+        let lng="<%=result.geometry.coordinates[0]%>";
+        let lat="<%=result.geometry.coordinates[1]%>";
+        mapboxgl.accessToken = "<%=process.env.MAP_TOKEN%>";
+    const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    
+    center: [lng,lat], // starting position [lng, lat]
+    zoom: 12 // starting zoom
+    
+    });
+    const marker = new mapboxgl.Marker({ color: '#169c74' }).setLngLat([lng, lat]).setPopup(new mapboxgl.Popup({offset: 25})
+.setHTML("<h4><%=result.title%></h4><p>Exact location is provided after booking.</p>")
+.setMaxWidth("300px")).addTo(map);
+    </script>
+
+        <script src="/js/script.js"></script>
+    </body>
+
+    </html>

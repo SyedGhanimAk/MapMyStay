@@ -1,0 +1,94 @@
+<head>
+    <link rel="stylesheet" href="../css/style.css">
+
+
+</head>
+
+<body>
+
+
+
+    <nav class="navbar sticky-top navbar-expand-md border-bottom bg-body-tertiary bg-opacity-75 ">
+        <div class="container-fluid ">
+
+            <a href="/listings" class="navbar-brand"><i class="fa-regular fa-compass "></i>
+            </a>
+            <a class="nav-link fw-bold" href="/listings">MapMyStay</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+                <form method="post" action="/listings/search" class="d-flex ms-auto search" role="search">
+                    <input class="nav-search form-control me-2" type="search"
+                    name="q"
+                    placeholder="Search by hotel, city, country..."
+                        aria-label="Search">
+                    <button class="btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass "></i></button>
+                </form>
+
+                <div class="navbar-nav ms-auto small ">
+                    <a class="nav-link" href="/listings/new">Create Listing</a>
+                    <% if(!userDetails) {%>
+
+                        <a class="nav-link" href="/login"><b>Log in</b> </a>
+                        <a class="nav-link" href="/signup"><b>Sign up</b></a>
+                        <%} else{ %> <a class="nav-link" href="/logout">Log out</a>
+                            <%} %>
+
+                                <!-- Dark Mode Switch -->
+                                <div class="form-check-reverse form-switch darkModeBtn ps-2 pe-5">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckChecked">
+                                    <label class="small form-check-label poppins-medium" for="flexSwitchCheckChecked"><i
+                                            class="fa-regular fa-moon fa-lg"></i></label>
+                                    
+                                </div>
+
+                </div>
+
+            </div>
+        </div>
+    </nav>
+    <script>
+        let nav_toggle = document.querySelector(".navbar-toggler");
+        let navbar = document.querySelector(".navbar");
+        nav_toggle.addEventListener("click", () => {
+            navbar.classList.toggle("nav-height-small-screen");
+        });
+    
+        let darkModeBtn = document.querySelector(".form-check-input");
+    
+        // Function to apply the dark mode based on the saved state
+        function applyDarkModeState() {
+            const darkModeEnabled = localStorage.getItem("darkMode") === "true"; // Check the saved state
+            darkModeBtn.checked = darkModeEnabled; // Set the toggle button state
+            if (darkModeEnabled) {
+                document.body.setAttribute("data-bs-theme", "dark");
+            } else {
+                document.body.removeAttribute("data-bs-theme");
+            }
+        }
+    
+        // Function to toggle dark mode and save the state
+        function darkMode() {
+            if (this.checked) {
+                document.body.setAttribute("data-bs-theme", "dark");
+                localStorage.setItem("darkMode", "true"); // Save state as enabled
+            } else {
+                document.body.removeAttribute("data-bs-theme");
+                localStorage.setItem("darkMode", "false"); // Save state as disabled
+            }
+        }
+    
+        // Apply the dark mode state on page load
+        applyDarkModeState();
+    
+        // Listen for dark mode toggle changes
+        darkModeBtn.addEventListener("change", darkMode);
+    </script>
+    
+</body>

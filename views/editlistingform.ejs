@@ -1,0 +1,63 @@
+<% layout('layouts/boilerplate') -%>
+
+    <head>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+
+    <body>
+        <div class="row d-flex justify-content-center">
+            <div class="col-10 col-sm-10 col-md-10 col-lg-8 fade-in">
+                <h2 class="mb-4">Edit listing</h2>
+                <form method="post" enctype="multipart/form-data" action="/listings/<%=result.id%>/edit"
+                    class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label for="title" class="form-label">Title</label>
+                        <input class="form-control" type="text" name="title" id="title" value="<%=result.title%>"
+                            required>
+                        <div class="invalid-feedback  mb-4">
+                            Please choose a valid title
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" id="description" class="form-control" rows="4"
+                            required> <%=result.description%></textarea>
+                        <div class="invalid-feedback">
+                            Please give a discription
+                        </div>
+                    </div>
+                    <div class="mb-4 ">
+                        Orginal Image </br>
+                        <img src="<%=newUrl%>" class="img-thumbnail">
+                    </div>
+                    <label for="image" class="form-label">New Image</label>
+                    <input class="form-control mb-4" type="file" name="image" id="image">
+                    <div class="row">
+                        <div class="mb-4 col-md-6">
+                            <label for="price" class="form-label">Price</label>
+                            <input class="form-control" type="number" name="price" id="price" placeholder="&#8377"
+                                value=<%=result.price%> >
+                            <div class="invalid-feedback">
+                                Please choose a valid price
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="location" class="form-label">Location</label>
+                            <input class="form-control" type="text" name="location" id="location" required
+                                value="<%=result.location%>">
+                            <div class="invalid-feedback">
+                                Please choose a valid location
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn mt-4">
+                        update
+                    </button>
+                </form>
+            </div>
+        </div>
+        <script src="/js/script.js"></script>
+    </body>
+
+    </html>
