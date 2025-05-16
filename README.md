@@ -16,7 +16,8 @@ planning.
 visual hotel insights.
 7. Advanced Search: Users can search hotels by name, location and country ensuring a personalized search experience.
 8. Dark Mode: Users can switch to a dark mode interface for a comfortable viewing experience,
-especially in low-light environments. 
+especially in low-light environments.
+9. Support Chatbot: The AI-powered chatbot provides instant support and answers user queries for a smoother user experience.
 
 # Technologies
 1. Frontend: HTML, CSS, Bootstrap, JavaScript and EJS for creating an engaging and
