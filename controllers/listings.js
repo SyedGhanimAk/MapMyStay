@@ -127,7 +127,3 @@ module.exports.searchPost = async (req, res) => {
     }
 };
 
-
-
-
-
