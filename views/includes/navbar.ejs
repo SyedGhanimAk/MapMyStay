@@ -10,10 +10,11 @@
 
     <nav class="navbar sticky-top navbar-expand-md border-bottom bg-body-tertiary bg-opacity-75 ">
         <div class="container-fluid ">
+            <a href="/listings" class="navbar-brand logo-link"><i class="fa-regular fa-compass"></i></a>
+            <a href="/listings" class="nav-link fw-bold logo-link">MapMyStay</a>
 
-            <a href="/listings" class="navbar-brand"><i class="fa-regular fa-compass "></i>
-            </a>
-            <a class="nav-link fw-bold" href="/listings">MapMyStay</a>
+
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -22,21 +23,19 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
                 <form method="post" action="/listings/search" class="d-flex ms-auto search" role="search">
-                    <input class="nav-search form-control me-2" type="search"
-                    name="q"
-                    placeholder="Search by hotel, city, country..."
-                        aria-label="Search">
+                    <input class="nav-search form-control me-2" type="search" name="q"
+                        placeholder="Search by hotel, city, country..." aria-label="Search">
                     <button class="btn" type="submit">
                         <i class="fa-solid fa-magnifying-glass "></i></button>
                 </form>
 
                 <div class="navbar-nav ms-auto small ">
-                    <a class="nav-link" href="/listings/new">Create Listing</a>
+                    <a class="nav-link crt_listing" href="/listings/new">Create Listing</a>
                     <% if(!userDetails) {%>
 
                         <a class="nav-link" href="/login"><b>Log in</b> </a>
                         <a class="nav-link" href="/signup"><b>Sign up</b></a>
-                        <%} else{ %> <a class="nav-link" href="/logout">Log out</a>
+                        <%} else{ %> <a class="nav-link" href="/logout" id="logoutLink">Log out</a>
                             <%} %>
 
                                 <!-- Dark Mode Switch -->
@@ -45,7 +44,7 @@
                                         id="flexSwitchCheckChecked">
                                     <label class="small form-check-label poppins-medium" for="flexSwitchCheckChecked"><i
                                             class="fa-regular fa-moon fa-lg"></i></label>
-                                    
+
                                 </div>
 
                 </div>
@@ -54,14 +53,17 @@
         </div>
     </nav>
     <script>
+        let deviceType = /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "mobile" : "desktop";
+        let username = "<%= userDetails ? userDetails.username : 'default_guest' %>"; // Ensure this is securely available
         let nav_toggle = document.querySelector(".navbar-toggler");
         let navbar = document.querySelector(".navbar");
+
         nav_toggle.addEventListener("click", () => {
             navbar.classList.toggle("nav-height-small-screen");
         });
-    
+
         let darkModeBtn = document.querySelector(".form-check-input");
-    
+
         // Function to apply the dark mode based on the saved state
         function applyDarkModeState() {
             const darkModeEnabled = localStorage.getItem("darkMode") === "true"; // Check the saved state
@@ -72,7 +74,7 @@
                 document.body.removeAttribute("data-bs-theme");
             }
         }
-    
+
         // Function to toggle dark mode and save the state
         function darkMode() {
             if (this.checked) {
@@ -83,12 +85,78 @@
                 localStorage.setItem("darkMode", "false"); // Save state as disabled
             }
         }
-    
+
         // Apply the dark mode state on page load
         applyDarkModeState();
-    
+
         // Listen for dark mode toggle changes
         darkModeBtn.addEventListener("change", darkMode);
+
+        //hide navbar on scroll
+        let lastScrollTop = 0;
+        const hideThreshold = 50; // Scroll threshold before hiding
+
+        window.addEventListener("scroll", function () {
+            let scrollTop = window.scrollY;
+
+            if (scrollTop > lastScrollTop + hideThreshold) {
+                navbar.style.top = "-80px"; // Adjust based on navbar height
+            } else if (scrollTop < lastScrollTop - hideThreshold) {
+                navbar.style.top = "0";
+            }
+
+            lastScrollTop = scrollTop;
+        });
+
+        document.querySelectorAll(".logo-link").forEach(link =>
+            link.addEventListener("click", () =>
+                gtag('event', 'logo_clk', {
+                    'device_type': deviceType,
+                    'username': username // Send username as a parameter
+                })
+            )
+        );
+
+          document.querySelector(".crt_listing").addEventListener("click", () => {            
+            gtag('event', 'crt_listing_clk', {
+                'device_type': deviceType,
+                'username': username
+            });
+        });
+
+        document.querySelector("form.search").addEventListener("submit", function (e) {
+            let searchTerm = this.querySelector("input[name='q']").value;
+            gtag('event', 'search', {
+                'search_term': searchTerm,
+                'device_type': deviceType,
+                'username': username // Send username as a parameter
+            });
+        });
+
+        // Logout event tracking
+    document.addEventListener("DOMContentLoaded", function () {
+        const logoutLink = document.getElementById("logoutLink");
+
+        if (logoutLink) {
+            logoutLink.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                // GA4 logout event
+                gtag('event', 'logout_attempt', {
+                    'username': username
+                });
+
+                // Redirect to logout after short delay
+                setTimeout(() => {
+                    window.location.href = "/logout";
+                }, 300);
+            });
+        }
+    });
+
+
     </script>
-    
+
+
+
 </body>
