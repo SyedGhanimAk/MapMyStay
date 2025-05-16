@@ -9,7 +9,7 @@
             <div class="col-10 col-sm-10 col-md-10 col-lg-8 fade-in">
                 <h2 class="mb-4">Edit listing</h2>
                 <form method="post" enctype="multipart/form-data" action="/listings/<%=result.id%>/edit"
-                    class="needs-validation" novalidate>
+                    class="needs-validation" novalidate id="editListingForm">
                     <div class="mb-4">
                         <label for="title" class="form-label">Title</label>
                         <input class="form-control" type="text" name="title" id="title" value="<%=result.title%>"
@@ -51,12 +51,42 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn mt-4">
+                    <button class="btn mt-4" id="editListingBtn">
                         update
                     </button>
                 </form>
             </div>
         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.getElementById("editListingForm");
+        
+                if (form) {
+                    form.addEventListener("submit", function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        } else {
+                            const title = document.getElementById("title").value;
+                            const description = document.getElementById("description").value.trim();
+                            const price = document.getElementById("price").value;
+                            const location = document.getElementById("location").value;
+        
+                            gtag('event', 'edit_listing_clk', {
+                                Title: title,
+                                Description: description,
+                                Price: price,
+                                Location: location
+                            });
+                        }
+        
+                        form.classList.add('was-validated');
+                    }, false);
+                }
+            });
+        </script>
+        
+
         <script src="/js/script.js"></script>
     </body>
 
