@@ -1,43 +1,53 @@
 <% layout('layouts/boilerplate') -%>
 
+<body>
+    <div class="row d-flex justify-content-center">
+        <div class="col-10 col-lg-6 fade-in">
+            <h2 class="mb-5">Login to MapMyStay</h2>
+            <form method="post" action="/login" class="needs-validation" novalidate id="loginForm">
 
-
-    <body>
-
-        <div class="row d-flex justify-content-center">
-            <div class="col-10 col-lg-6 fade-in">
-                <h2 class="mb-5">Login to MapMyStay</h2>
-                <form method="post" action="/login" class="needs-validation" novalidate>
-
-                    <div class=" mb-4">
-                        <label for="username" class="form-label">Username</label>
-                        <input class="form-control" type="text" name="username" id="username"
-                            placeholder="Enter Username" required>
-                        <div class="invalid-feedback">
-                            Please enter your username
-                        </div>
+                <div class="mb-4">
+                    <label for="username" class="form-label">Username</label>
+                    <input class="form-control" type="text" name="username" id="username"
+                        placeholder="Enter Username" required>
+                    <div class="invalid-feedback">
+                        Please enter your username
                     </div>
-                    <div class="mb-4 ">
-                        <label for="password" class="form-label">Password</label>
-                        <input class="form-control" type="password" name="password" id="password"
-                            placeholder="Enter new password" required>
-                        <div class="invalid-feedback">
-                            Please enter your password
-                        </div>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input class="form-control" type="password" name="password" id="password"
+                        placeholder="Enter new password" required>
+                    <div class="invalid-feedback">
+                        Please enter your password
                     </div>
+                </div>
 
-
-                    <div class="mb-4">
-                        <button class="btn">
-                            log in
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <div class="mb-4">
+                    <button class="btn" id="loginBtn">
+                        log in
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        </div>
-        <script src="/js/script.js"></script>
-    </body>
+    <script>
+        document.getElementById("loginBtn").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent form submission for event tracking
+            var username = document.getElementById("username").value;
 
-    </html>
+            // Send GA4 event
+            gtag('event', 'login_attempt', {
+                'username': username
+            });
+
+            // Submit the form after a short delay
+            setTimeout(() => {
+                document.getElementById("loginForm").submit();
+            }, 300);
+        });
+    </script>
+
+    <script src="/js/script.js"></script>
+</body>
