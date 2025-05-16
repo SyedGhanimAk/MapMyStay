@@ -17,7 +17,10 @@ visual hotel insights.
 7. Advanced Search: Users can search hotels by name, location and country ensuring a personalized search experience.
 8. Dark Mode: Users can switch to a dark mode interface for a comfortable viewing experience,
 especially in low-light environments.
-9. Support Chatbot: The AI-powered chatbot provides instant support and answers user queries for a smoother user experience.
+9. Support Chatbot: Integrated with Chatbase.co, the AI-powered chatbot offers real-time assistance, helping users with navigation, listings, and common queries.
+10. Analytics Tracking: Integrated with Google Analytics 4, the platform tracks 15+ custom user events to monitor and optimize user engagement and platform performance.
+
+
 
 # Technologies
 1. Frontend: HTML, CSS, Bootstrap, JavaScript and EJS for creating an engaging and
