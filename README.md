@@ -38,4 +38,4 @@ ensuring smooth deployment and collaborative development.
 4. Map view: Use the map view to find the hotel location.
 
 # Direct link to project
-https://mapmystay.onrender.com
+https://mapmystay.onrender.com/listings
