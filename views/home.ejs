@@ -1,8 +1,7 @@
 <% layout('layouts/boilerplate') -%>
 
     <body>
-
-        <div class="filters">
+          <div class="filters">
 
             <div id="filters">
                 <i class="fa-solid fs fa-fire "></i>
@@ -95,14 +94,21 @@
 
         <script>
             let tax_switch = document.getElementById("flexSwitchCheckDefault");
-
             let tax_info = document.querySelectorAll("#tax-info");
+        
             tax_switch.addEventListener("click", () => {
-                for (info of tax_info) {
+                let toggleState = tax_switch.checked ? "ON" : "OFF"; // Check switch state
+        
+                tax_info.forEach(info => {
                     info.classList.toggle("tax-info");
-                }
-
-            })</script>
+                });
+        
+                gtag('event', 'toggle_tax', {
+                    'toggle_state': toggleState
+                });
+            });
+        </script>
+        
 
 <script>
     // Get the form and the results container
@@ -121,6 +127,21 @@
         if (resultsContainer) {
             resultsContainer.classList.add("fade-in");
         }
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".listingCard").forEach(card => {
+            card.addEventListener("click", () => {
+                let hotelName = card.querySelector(".title")?.innerText.trim() || "Unknown";
+                let price = card.querySelector(".price strong")?.innerText.replace("₹", "").trim() || "N/A";
+                let pageLocation = window.location.href;
+                let sessionId = sessionStorage.getItem("session_id") || "unknown_session";
+
+                gtag('event', 'listing_clk', {
+                    'hotel_name': hotelName,
+                    'price': price,
+                });
+            });
+        });
     });
 </script>
 
