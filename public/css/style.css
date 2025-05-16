@@ -118,6 +118,9 @@ body {
 
 }
 
+.form-check-input{
+    cursor: pointer;
+}
 .darkModeBtn {
     user-select: none;
     border: 1px solid gray;
@@ -179,6 +182,9 @@ nav {
     box-shadow: 2px 4px 8px rgba(125, 125, 125, 0.157);
     /* Bottom shadow */
 
+}
+.navbar {
+    transition: top .5s;
 }
 
 
