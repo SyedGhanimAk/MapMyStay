@@ -34,4 +34,4 @@ ensuring smooth deployment and collaborative development.
 4. Map view: Use the map view to find the hotel location.
 
 # Direct link to project
-https://wanderlust-project-kobt.onrender.com/listings
+https://mapmystay.onrender.com
