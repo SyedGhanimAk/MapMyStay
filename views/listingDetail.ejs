@@ -3,6 +3,7 @@
     <body>
         <div class="row d-flex justify-content-center">
             <div class="col-10 col-lg-8 col-xl-6 ">
+                
                 <div class="card listingDetailCard fade-in">
                     <h3 class="card-title mb-4">
                         <%=result.title%>
@@ -36,10 +37,30 @@
 
                                     <button class="btn me-2">Edit</button>
                                 </form>
-                                <form method="post" action="/listings/<%=result.id%>/delete">
+                              
 
-                                    <button class="btn ms-2">Delete</button>
+                                <form method="post" action="/listings/<%= result.id %>/delete" onsubmit="return handleDelete(event)">
+                                    <button class="btn ms-2"
+                                        id="deleteBtn"
+                                        data-id="<%= result.id %>" 
+                                        data-title="<%= result.title %>"
+                                        data-description="<%= result.description %>"
+                                        data-price="<%= result.price %>"
+                                        data-location="<%= result.location %>">
+        
+                                        Delete</button>
                                 </form>
+                                
+                                
+                                <script>
+                                    function confirmDelete() {
+                                        return confirm("Delete this listing permanently?");
+                                    }
+
+                                    
+
+                                </script>
+                                
                             </div>
                             <%}%>
 
@@ -54,7 +75,7 @@
                         <hr>
                         <br>
                         <h4>Leave a review</h4>
-                        <form method="post" action="/listings/<%=result.id%>" class="needs-validation" novalidate>
+                        <form method="post"id="reviewForm" action="/listings/<%=result.id%>" class="needs-validation" novalidate>
                     
                             <label for="ratingDiv" class="form-label mt-3">Rating</label>
                             <fieldset class="starability-checkmark" >
@@ -119,6 +140,7 @@
                                         </div>
                             </div>
                 </div>
+                
                 <div class="MapBox">
                 <hr><br>
                 <h4 >Where you’ll be</h4>
@@ -147,6 +169,43 @@
     const marker = new mapboxgl.Marker({ color: '#169c74' }).setLngLat([lng, lat]).setPopup(new mapboxgl.Popup({offset: 25})
 .setHTML("<h4><%=result.title%></h4><p>Exact location is provided after booking.</p>")
 .setMaxWidth("300px")).addTo(map);
+
+
+    function handleDelete(event) {
+        const confirmed = confirm("Delete this listing permanently?");
+        if (!confirmed) return false;
+
+        const btn = document.getElementById("deleteBtn");
+        const id = btn.getAttribute("data-id");
+        const description = btn.getAttribute("data-description");
+        const price = btn.getAttribute("data-price");
+        const location = btn.getAttribute("data-location");
+        const title = btn.getAttribute("data-title");
+
+        gtag('event', 'delete_listing_clk', {
+            id: id,
+            Title: title,
+            location: location,
+            description: description,
+            price: price
+
+        });
+
+        return true; // allow form to submit
+    }
+
+
+    document.getElementById("reviewForm")?.addEventListener("submit", function () {
+        const rating = document.querySelector('input[name="rating"]:checked')?.value;
+        const comment = document.getElementById("comments")?.value;
+
+        gtag('event', 'review_submit_clk', {
+            rating: rating,
+            comment: comment
+        });
+    });
+
+
     </script>
 
         <script src="/js/script.js"></script>
